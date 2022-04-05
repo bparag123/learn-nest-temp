@@ -23,11 +23,11 @@ export class ProductsService {
     return this.productModel.findOne({ where: { id } });
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto): Promise<any> {
+    return this.productModel.update(updateProductDto, { where: { id } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number): Promise<number> {
+    return this.productModel.destroy({ where: { id } });
   }
 }

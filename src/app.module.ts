@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Product } from './products/product.model';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    UsersModule,
     ProductsModule,
     SequelizeModule.forRoot({
       dialect: 'mysql',
@@ -21,6 +21,8 @@ import { Product } from './products/product.model';
       autoLoadModels: true,
       synchronize: true,
     }),
+    UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
