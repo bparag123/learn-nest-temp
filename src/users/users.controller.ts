@@ -14,18 +14,25 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { UserSerializer } from './serializers/user.serializer';
-
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+} from '@nestjs/swagger';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: 'Create New User' })
+  @ApiCreatedResponse({ description: 'User Created' })
   @Post()
   @UsePipes(ValidationPipe)
   async create(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto);
     return await this.usersService.create(createUserDto);
   }
 
+  @ApiOperation({ summary: 'Get the user profile data' })
+  @ApiBearerAuth()
   @Get('profile')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)

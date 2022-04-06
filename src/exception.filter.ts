@@ -8,9 +8,11 @@ import {
 import { Response } from 'express';
 import { ValidationError } from 'sequelize';
 
+//Handling all the exceptions
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
+    //Here we can get all the data from host object
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
     const request = context.getRequest<Request>();
@@ -26,7 +28,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (exception instanceof ValidationError) {
       message = exception.message;
     }
-    console.log(message);
+    //Sending the custom response for any exception
     response.status(status).json({
       status,
       timestamp: new Date().toISOString(),
