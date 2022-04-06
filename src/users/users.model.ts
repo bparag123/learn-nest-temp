@@ -3,7 +3,6 @@ import {
   Column,
   IsEmail,
   Model,
-  NotNull,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';

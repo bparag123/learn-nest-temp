@@ -1,6 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Injectable,
+  UseInterceptors,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UserSerializer } from 'src/users/serializers/user.serializer';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -13,8 +19,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  //This function will run when the JWT is valid
+  @UseInterceptors(ClassSerializerInterceptor)
   async validate(payload: any) {
-    return await this.userService.findByEmail(payload.email);
+    const user: any = await this.userService.findByEmail(payload.email);
+    return new UserSerializer(user.dataValues);
   }
 }
