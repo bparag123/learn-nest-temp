@@ -5,6 +5,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 @Module({
   imports: [
     //Setting up the Configuration Module for .env
@@ -22,8 +23,22 @@ import { ConfigModule } from '@nestjs/config';
     }),
     UsersModule,
     AuthModule,
+    //Binding the Throttling Module for Rate Limiting
+    ThrottlerModule.forRoot({
+      //Here this is time in second
+      ttl: 60,
+      //This is number of requests per given ttl
+      limit: 1,
+    }),
   ],
   controllers: [AppControllerV1, AppControllerV2],
-  providers: [AppService],
+  providers: [
+    AppService,
+    //This is global setup for Rate limit the requests
+    {
+      provide: 'APP_GUARD',
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
