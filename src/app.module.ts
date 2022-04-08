@@ -28,7 +28,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
       //Here this is time in second
       ttl: 60,
       //This is number of requests per given ttl
-      limit: 1,
+      limit: 100,
     }),
   ],
   controllers: [AppControllerV1, AppControllerV2],
