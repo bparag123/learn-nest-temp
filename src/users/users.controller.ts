@@ -19,6 +19,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
+import { DoesUserExist } from 'src/auth/guards/unique_email.guards';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -26,6 +27,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Create New User' })
   @ApiCreatedResponse({ description: 'User Created' })
   @Post()
+  @UseGuards(DoesUserExist)
   @UsePipes(ValidationPipe)
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
